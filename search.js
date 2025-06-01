@@ -30,6 +30,12 @@ function getCategoryClass(category) {
     }
 }
 
+// Only for price and total
+function formatNumberWithSpaces(x) {
+    if (typeof x !== 'number' && typeof x !== 'string') return x;
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 function renderProducts(products) {
     const tbody = document.querySelector('#productTable tbody');
     tbody.innerHTML = '';
@@ -50,10 +56,10 @@ function renderProducts(products) {
       <td>${product.mainCategory}</td>
       <td>${product.subCategory}</td>
       <td>${product.pcs}</td>
-      <td>${product.price}</td>
+      <td>${formatNumberWithSpaces(product.price)}</td>
       <td>${product.transaction}</td>
       <td>${product.date}</td>
-      <td>${product.overall}</td>
+      <td>${formatNumberWithSpaces(product.overall)}</td>
     `;
         tbody.appendChild(row);
     });
