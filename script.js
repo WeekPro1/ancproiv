@@ -59,9 +59,10 @@ document.getElementById('productForm').addEventListener('submit', async function
             overall
         };
 
-        if (editingProductId) {
-            product.id = editingProductId;
-        }
+        // Do not add id field for editing (most APIs don't want it in PATCH/PUT body)
+        // if (editingProductId) {
+        //     product.id = editingProductId;
+        // }
 
         return product;
     }
@@ -70,8 +71,9 @@ document.getElementById('productForm').addEventListener('submit', async function
     const url = API_ENDPOINTS[product.mainCategory];
 
     try {
-        const method = editingProductId ? 'PUT' : 'POST';
-        const endpoint = editingProductId ? `${url}/${editingProductId}` : url;
+        const isEditing = !!editingProductId;
+        const method = isEditing ? 'PATCH' : 'POST'; // PATCH is often safer for mock/test APIs
+        const endpoint = isEditing ? `${url}/${editingProductId}` : url;
 
         const response = await fetch(endpoint, {
             method,
@@ -82,12 +84,13 @@ document.getElementById('productForm').addEventListener('submit', async function
         });
 
         if (response.ok) {
-            alert(editingProductId ? 'Product updated!' : 'Product added!');
+            alert(isEditing ? 'Product updated!' : 'Product added!');
             this.reset();
             editingProductId = null;
             fetchAllProducts();
         } else {
-            alert('Failed to save product.');
+            const errorText = await response.text();
+            alert('Failed to save product. ' + errorText);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -173,7 +176,7 @@ function fillForm(product) {
 }
 
 async function editProduct(id, mainCategory) {
-    const product = allProducts.find(p => p.id == id);
+    const product = allProducts.find(p => String(p.id) === String(id));
     if (!product) return alert("Product not found!");
     editingProductId = product.id;
     fillForm(product);
@@ -203,7 +206,7 @@ async function deleteProduct(id, category) {
 }
 
 async function duplicateProduct(id, category) {
-    const product = allProducts.find(p => p.id == id);
+    const product = allProducts.find(p => String(p.id) === String(id));
     if (!product) return;
     const copy = {
         ...product
