@@ -60,9 +60,9 @@ document.getElementById('productForm').addEventListener('submit', async function
         };
 
         // Do not add id field for editing (most APIs don't want it in PATCH/PUT body)
-        // if (editingProductId) {
-        //     product.id = editingProductId;
-        // }
+        if (editingProductId) {
+            product.id = editingProductId;
+        }
 
         return product;
     }
