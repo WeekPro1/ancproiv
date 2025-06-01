@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-section,
+.table-section {
+    margin-bottom: 40px;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+form input,
+form select {
+    padding: 8px;
+    font-size: 16px;
+    width: 200px;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Category-specific row colors */
+.tel-category {
+    background-color: #03e2ff;
+}
+
+.texnika-category {
+    background-color: #ea63f7;
+}
+
+.audio-category {
+    background-color: #c52aae;
+}
+
+/* Subcategory-specific colors */
+.subcategory {
+    font-weight: bold;
+}
+
+.subcategory.phone {
+    color: #1e88e5;
+}
+
+.subcategory.kitchen {
+    color: #43a047;
+}
+
+.subcategory.speaker {
+    color: #d81b60;
+}
+
+/* Transaction-specific colors */
+.transaction {
+    font-weight: bold;
+}
+
+.transaction.sotildi {
+    color: #388e3c;
+}
+
+.transaction.olindi {
+    color: #d32f2f;
+}
+
+td button {
+    margin: 2px;
+    padding: 4px 8px;
+    font-size: 14px;
+}

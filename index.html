@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Management</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>📦 Product Management</h1>
+        <button onclick="window.location.href='search.html'">🔍 Go to Search Page</button>
+    </header>
+
+    <main>
+        <section class="form-section">
+            <h2>Add New Product</h2>
+            <form id="productForm">
+                <input type="text" id="name" placeholder="Product Name" required />
+                <select id="mainCategory" required>
+                    <option value="">Select Main Category</option>
+                    <option value="telefon va boshqa qurilmalar">Telefon va Boshqa Qurilmalar</option>
+                    <option value="maishiy texnikalar">Maishiy Texnikalar</option>
+                    <option value="audio kalonkalar">Audio Kalonkalar</option>
+                    <option value="cameralar">Cameralar</option>
+                    <option value="avto akssessuar">Avto akssessuar</option>
+                    <option value="baraka bozor">Baraka bozor</option>
+                </select>
+                <select id="subCategory" required>
+                    <option value="">Select Subcategory</option>
+                </select>
+                <input type="number" id="pcs" placeholder="Quantity" required />
+                <input type="number" id="price" placeholder="Price" required />
+                <select id="transaction" required>
+                    <option value="">Select Transaction</option>
+                    <option value="Naqd pul">Naqd pul</option>
+                    <option value="Click">Click</option>
+                    <option value="Uzumbank">Uzumbank</option>
+                    <option value="olindi">Uzumnasiya</option>
+                    <option value="Omonat qarz">Omonat qarz</option>
+                    <option value="Qarz">Qarz</option>
+                    <option value="Open">Open</option>
+                    <option value="Intent">Intent</option>
+                    <option value="Alif Nasiya">Alif Nasiya</option>
+                    <option value="Nasiya">Nasiya</option>
+                </select>
+                <input type="date" id="date" required />
+                <button type="submit">Add Product</button>
+            </form>
+        </section>
+
+        <section class="table-section">
+            <h2>Product List</h2>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Main Category</th>
+                        <th>Subcategory</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Transaction</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
