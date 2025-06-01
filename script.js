@@ -23,7 +23,7 @@ document.getElementById('mainCategory').addEventListener('change', function() {
     const subSelect = document.getElementById('subCategory');
     const selectedCategory = this.value;
 
-    subSelect.innerHTML = '<option value="">Select Subcategory</option>';
+    subSelect.innerHTML = '<option value="">' + 'Select Subcategory' + '</option>';
 
     if (SUBCATEGORIES[selectedCategory]) {
         SUBCATEGORIES[selectedCategory].forEach(sub => {
@@ -59,7 +59,6 @@ document.getElementById('productForm').addEventListener('submit', async function
             overall
         };
 
-        // Do not add id field for editing (most APIs don't want it in PATCH/PUT body)
         if (editingProductId) {
             product.id = editingProductId;
         }
@@ -72,7 +71,7 @@ document.getElementById('productForm').addEventListener('submit', async function
 
     try {
         const isEditing = !!editingProductId;
-        const method = isEditing ? 'PATCH' : 'POST'; // PATCH is often safer for mock/test APIs
+        const method = isEditing ? 'PATCH' : 'POST';
         const endpoint = isEditing ? `${url}/${editingProductId}` : url;
 
         const response = await fetch(endpoint, {
@@ -136,6 +135,12 @@ function getSubCategoryClass(subCategory) {
     return '';
 }
 
+// Only for price and total
+function formatNumberWithSpaces(x) {
+    if (typeof x !== 'number' && typeof x !== 'string') return x;
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 function renderProducts(products) {
     const tbody = document.querySelector('#productTable tbody');
     tbody.innerHTML = '';
@@ -150,10 +155,10 @@ function renderProducts(products) {
       <td>${product.mainCategory}</td>
       <td class="subcategory ${getSubCategoryClass(product.subCategory)}">${product.subCategory}</td>
       <td>${product.pcs}</td>
-      <td>${product.price}</td>
+      <td>${formatNumberWithSpaces(product.price)}</td>
       <td class="transaction ${product.transaction.toLowerCase()}">${product.transaction}</td>
       <td>${product.date}</td>
-      <td>${product.overall}</td>
+      <td>${formatNumberWithSpaces(product.overall)}</td>
       <td>
         <button onclick="editProduct('${product.id}', '${product.mainCategory}')">✏️</button>
         <button onclick="deleteProduct('${product.id}', '${product.mainCategory}')">🗑️</button>
