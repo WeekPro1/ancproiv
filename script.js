@@ -1,3 +1,13 @@
+const MAIN_CATEGORIES = [
+    'telefon va boshqa qurilmalar',
+    'maishiy texnikalar',
+    'audio kalonkalar',
+    'cameralar',
+    'avto akssessuar',
+    'baraka bozor'
+];
+const SUBCATEGORY_API_URL = "https://efb4625be74f9a88.mokky.dev/subcategories";
+
 const API_ENDPOINTS = {
     'telefon va boshqa qurilmalar': 'https://efb4625be74f9a88.mokky.dev/tel',
     'maishiy texnikalar': 'https://efb4625be74f9a88.mokky.dev/texnika',
@@ -5,15 +15,6 @@ const API_ENDPOINTS = {
     'cameralar': 'https://efb4625be74f9a88.mokky.dev/camera',
     'avto akssessuar': 'https://efb4625be74f9a88.mokky.dev/avto',
     'baraka bozor': 'https://efb4625be74f9a88.mokky.dev/baraka'
-};
-
-const SUBCATEGORIES = {
-    'telefon va boshqa qurilmalar': ['Telefon', 'Planshet', 'Noutbuk'],
-    'maishiy texnikalar': ['Muzlatgich', 'Konditsioner', 'Televizor'],
-    'audio kalonkalar': ['Simli', 'Bluetooth', 'Portativ'],
-    'cameralar': ['Kuzatuv'],
-    'avto akssessuar': [''],
-    'baraka bozor': ['Ovqat', 'Ichimliklar', 'Boshqa']
 };
 
 let allProducts = [];
@@ -41,24 +42,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceInput = document.getElementById('price');
     const pcsInput = document.getElementById('pcs');
 
+    // Dynamic subcategory loading from API
+    async function refreshSubcategoriesFor(mainCategory) {
+        subCategorySelect.innerHTML = '<option value="">Loading...</option>';
+        if (!mainCategory) {
+            subCategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+            return;
+        }
+        try {
+            const res = await fetch(`${SUBCATEGORY_API_URL}?mainCategory=${encodeURIComponent(mainCategory)}`);
+            const subcats = (res.ok) ? await res.json() : [];
+            subCategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+            subcats.forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub.name;
+                option.textContent = sub.name;
+                subCategorySelect.appendChild(option);
+            });
+        } catch (e) {
+            subCategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+        }
+    }
+
     if (mainCategorySelect && subCategorySelect) {
         mainCategorySelect.addEventListener('change', function() {
-            const selectedCategory = this.value;
-            subCategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
-            if (SUBCATEGORIES[selectedCategory]) {
-                SUBCATEGORIES[selectedCategory].forEach(sub => {
-                    const option = document.createElement('option');
-                    option.value = sub;
-                    option.textContent = sub;
-                    subCategorySelect.appendChild(option);
-                });
-            }
+            refreshSubcategoriesFor(this.value);
         });
+        // On page load, trigger change to fill subcategories for the initially selected main category
+        refreshSubcategoriesFor(mainCategorySelect.value);
     }
 
     // Format kprice input live
     if (kpriceInput) {
-        kpriceInput.addEventListener('input', function(e) {
+        kpriceInput.addEventListener('input', function() {
             let val = kpriceInput.value.replace(/[^\d]/g, "");
             if (val) {
                 kpriceInput.value = formatNumberWithCommaSpace(val);
@@ -72,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Format price input live
     if (priceInput) {
-        priceInput.addEventListener('input', function(e) {
+        priceInput.addEventListener('input', function() {
             let val = priceInput.value.replace(/[^\d]/g, "");
             if (val) {
                 priceInput.value = formatNumberWithCommaSpace(val);
@@ -86,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Format pcs input live
     if (pcsInput) {
-        pcsInput.addEventListener('input', function(e) {
+        pcsInput.addEventListener('input', function() {
             let val = pcsInput.value.replace(/[^\d]/g, "");
             if (val) {
                 pcsInput.value = formatNumberWithCommaSpace(val);
@@ -254,7 +270,9 @@ function fillForm(product) {
     document.getElementById('name').value = product.name || '';
     document.getElementById('mainCategory').value = product.mainCategory || '';
     document.getElementById('mainCategory').dispatchEvent(new Event('change'));
-    document.getElementById('subCategory').value = product.subCategory || '';
+    setTimeout(() => {
+        document.getElementById('subCategory').value = product.subCategory || '';
+    }, 300); // wait for subcategories to load
     document.getElementById('pcs').value = product.pcs !== undefined && product.pcs !== null ? formatNumberWithCommaSpace(product.pcs) : '';
     document.getElementById('price').value = product.price !== undefined && product.price !== null ? formatNumberWithCommaSpace(product.price) : '';
     document.getElementById('kprice').value = product.kprice !== undefined && product.kprice !== null ? formatNumberWithCommaSpace(product.kprice) : '';
