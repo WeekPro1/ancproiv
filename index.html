@@ -9,6 +9,18 @@
 </head>
 
 <body>
+    <script>
+(function() {
+  var allowed = false;
+  var pass = prompt("Enter password to access:");
+  if(pass === "Doston123.") {
+    allowed = true;
+  }
+  if(!allowed) {
+    document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:3em;'>Access denied</h2>";
+  }
+})();
+</script>
     <header>
         <h1>📦 ANCpro story</h1>
         <button onclick="window.location.href='subcategory.html'">📚 Subcategory Management</button>
