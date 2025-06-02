@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Subcategory Management</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .subcategory-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .subcategory-list li {
+            padding: 6px 0;
+        }
+
+        .subcategory-list button {
+            margin-left: 12px;
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button onclick="window.location.href='index.html'">← Back to Products</button>
+        <h1>Subcategory Management</h1>
+    </header>
+    <main>
+        <section>
+            <label for="mainCategorySelect">Main Category:</label>
+            <select id="mainCategorySelect"></select>
+        </section>
+        <section>
+            <h2>Subcategories</h2>
+            <ul id="subcategoryList" class="subcategory-list"></ul>
+        </section>
+        <section>
+            <h2>Add Subcategory</h2>
+            <div class="flex-row">
+                <input type="text" id="newSubcategory" placeholder="New subcategory name" />
+                <button id="addSubcategoryBtn">Add</button>
+            </div>
+            <div id="subcatMsg"></div>
+        </section>
+    </main>
+    <script src="subcategory.js"></script>
+</body>
+
+</html>
