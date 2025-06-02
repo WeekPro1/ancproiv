@@ -1,90 +1,104 @@
-const API_ENDPOINTS = [
-    'https://efb4625be74f9a88.mokky.dev/tel',
-    'https://efb4625be74f9a88.mokky.dev/texnika',
-    'https://efb4625be74f9a88.mokky.dev/audio'
-];
+const API_ENDPOINTS = {
+    "telefon va boshqa qurilmalar": "https://efb4625be74f9a88.mokky.dev/tel",
+    "maishiy texnikalar": "https://efb4625be74f9a88.mokky.dev/texnika",
+    "audio kalonkalar": "https://efb4625be74f9a88.mokky.dev/audio",
+    "cameralar": "https://efb4625be74f9a88.mokky.dev/camera",
+    "avto akssessuar": "https://efb4625be74f9a88.mokky.dev/avto",
+    "baraka bozor": "https://efb4625be74f9a88.mokky.dev/baraka"
+};
 
 let allProducts = [];
 
 async function fetchAllProducts() {
     try {
-        const responses = await Promise.all(API_ENDPOINTS.map(url => fetch(url)));
+        const urls = Object.values(API_ENDPOINTS);
+        const responses = await Promise.all(urls.map(url => fetch(url)));
         const dataArrays = await Promise.all(responses.map(res => res.json()));
         allProducts = dataArrays.flat();
         renderProducts(allProducts);
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
     }
 }
 
 function getCategoryClass(category) {
+    if (!category) return "";
     switch (category.toLowerCase()) {
-        case 'telefon va boshqa qurilmalar':
-            return 'tel-category';
-        case 'maishiy texnikalar':
-            return 'texnika-category';
-        case 'audio kalonkalar':
-            return 'audio-category';
+        case "telefon va boshqa qurilmalar":
+            return "tel-category";
+        case "maishiy texnikalar":
+            return "texnika-category";
+        case "audio kalonkalar":
+            return "audio-category";
+        case "cameralar":
+            return "camera-category";
+        case "avto akssessuar":
+            return "avto-category";
+        case "baraka bozor":
+            return "baraka-category";
         default:
-            return '';
+            return "";
     }
 }
 
 // Only for price and total
 function formatNumberWithSpaces(x) {
-    if (typeof x !== 'number' && typeof x !== 'string') return x;
+    if (typeof x !== "number" && typeof x !== "string") return x;
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 function renderProducts(products) {
-    const tbody = document.querySelector('#productTable tbody');
-    tbody.innerHTML = '';
+    const tbody = document.querySelector("#productTable tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
 
-    if (products.length === 0) {
-        document.getElementById('resultCount').textContent = 'We couldn’t find anything.';
+    if (!products || products.length === 0) {
+        document.getElementById("resultCount").textContent = "We couldn’t find anything.";
         return;
     }
 
-    document.getElementById('resultCount').textContent = `Found ${products.length} result(s).`;
+    document.getElementById("resultCount").textContent = `Found ${products.length} result(s).`;
 
     products.forEach((product, index) => {
-        const row = document.createElement('tr');
-        row.classList.add(getCategoryClass(product.mainCategory));
+        const row = document.createElement("tr");
+        row.classList.add(getCategoryClass(product.mainCategory || ""));
         row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${product.name}</td>
-      <td>${product.mainCategory}</td>
-      <td>${product.subCategory}</td>
-      <td>${product.pcs}</td>
-      <td>${formatNumberWithSpaces(product.price)}</td>
-      <td>${product.transaction}</td>
-      <td>${product.date}</td>
-      <td>${formatNumberWithSpaces(product.overall)}</td>
-    `;
+            <td>${index + 1}</td>
+            <td>${product.name || ""}</td>
+            <td>${product.mainCategory || ""}</td>
+            <td>${product.subCategory || ""}</td>
+            <td>${product.pcs || ""}</td>
+            <td>${formatNumberWithSpaces(product.price)}</td>
+            <td>${product.transaction || ""}</td>
+            <td>${product.date || ""}</td>
+            <td>${formatNumberWithSpaces(product.overall)}</td>
+        `;
         tbody.appendChild(row);
     });
 }
 
 function applyFilters() {
-    const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const categoryFilter = (document.getElementById("categoryFilter").value || "").toLowerCase();
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+    const searchQuery = (document.getElementById("searchInput").value || "").toLowerCase();
 
     const filtered = allProducts.filter(product => {
-        const matchesCategory = categoryFilter ? product.mainCategory.toLowerCase() === categoryFilter : true;
+        const mainCategory = (product.mainCategory || "").toLowerCase();
+        const matchesCategory = categoryFilter ? mainCategory === categoryFilter : true;
         const matchesStartDate = startDate ? new Date(product.date) >= new Date(startDate) : true;
         const matchesEndDate = endDate ? new Date(product.date) <= new Date(endDate) : true;
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery);
+        const matchesSearch = (product.name || "").toLowerCase().includes(searchQuery);
         return matchesCategory && matchesStartDate && matchesEndDate && matchesSearch;
     });
 
     renderProducts(filtered);
 }
 
-document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-document.getElementById('startDate').addEventListener('change', applyFilters);
-document.getElementById('endDate').addEventListener('change', applyFilters);
-document.getElementById('searchInput').addEventListener('input', applyFilters);
-
-document.addEventListener('DOMContentLoaded', fetchAllProducts);
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAllProducts();
+    document.getElementById("categoryFilter").addEventListener("change", applyFilters);
+    document.getElementById("startDate").addEventListener("change", applyFilters);
+    document.getElementById("endDate").addEventListener("change", applyFilters);
+    document.getElementById("searchInput").addEventListener("input", applyFilters);
+});
