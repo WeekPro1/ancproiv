@@ -31,8 +31,9 @@
                 <select id="subCategory" required>
                     <option value="">Select Subcategory</option>
                 </select>
-                <input type="number" id="pcs" placeholder="Quantity" required />
-                <input type="number" id="price" placeholder="Price" required />
+                <input type="text" id="pcs" placeholder="Quantity" inputmode="numeric" pattern="[0-9, ]*" required />
+                <input type="text" id="price" placeholder="Price" inputmode="numeric" pattern="[0-9, ]*" required />
+                <input type="text" id="kprice" placeholder="K Price (optional)" inputmode="numeric" pattern="[0-9, ]*" />
                 <select id="transaction" required>
                     <option value="">Select Transaction</option>
                     <option value="Naqd pul">Naqd pul</option>
@@ -62,6 +63,7 @@
                         <th>Subcategory</th>
                         <th>Quantity</th>
                         <th>Price</th>
+                        <th>K Price</th>
                         <th>Transaction</th>
                         <th>Date</th>
                         <th>Total</th>
