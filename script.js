@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic subcategory loading from API
     async function refreshSubcategoriesFor(mainCategory) {
-        subCategorySelect.innerHTML = '<option value="">Loading...</option>';
+        subCategorySelect.innerHTML = '<option value="Loading...">Loading...</option>';
         if (!mainCategory) {
             subCategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
             return;
@@ -198,11 +198,28 @@ function collectFormData() {
     return product;
 }
 
+// Sort helper: Most recent first, fallback to id (desc)
+function sortProductsNewestFirst(products) {
+    // Prefer date, fallback to id
+    // If API creates incremental IDs, sorting by id desc is often OK
+    return products.slice().sort((a, b) => {
+        if (b.date && a.date && b.date !== a.date) {
+            return new Date(b.date) - new Date(a.date);
+        }
+        if (b.id && a.id) {
+            return Number(b.id) - Number(a.id);
+        }
+        return 0;
+    });
+}
+
 async function fetchAllProducts() {
     try {
         const responses = await Promise.all(Object.values(API_ENDPOINTS).map(url => fetch(url)));
         const dataArrays = await Promise.all(responses.map(res => res.json()));
-        allProducts = dataArrays.flat();
+        let products = dataArrays.flat();
+        products = sortProductsNewestFirst(products); // NEW: sort newest first
+        allProducts = products;
         renderProducts(allProducts);
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -236,6 +253,7 @@ function getSubCategoryClass(subCategory) {
     return '';
 }
 
+// Always render # column at left, newest first
 function renderProducts(products) {
     const tbody = document.querySelector('#productTable tbody');
     if (!tbody) return;
