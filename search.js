@@ -75,11 +75,12 @@ function renderProducts(products) {
 
     document.getElementById("resultCount").textContent = `Found ${products.length} result(s).`;
 
+    const total = products.length;
     products.forEach((product, index) => {
         const row = document.createElement("tr");
         row.classList.add(getCategoryClass(product.mainCategory || ""));
         row.innerHTML = `
-            <td>${index + 1}</td>
+            <td>${total - index}</td>
             <td>${product.name || ""}</td>
             <td>${product.mainCategory || ""}</td>
             <td>${product.subCategory || ""}</td>
