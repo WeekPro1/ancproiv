@@ -17,11 +17,26 @@ function formatNumberWithCommaSpace(x) {
 
 let allProducts = [];
 
+// Sort helper: Most recent first, fallback to id (desc)
+function sortProductsNewestFirst(products) {
+    return products.slice().sort((a, b) => {
+        if (b.date && a.date && b.date !== a.date) {
+            return new Date(b.date) - new Date(a.date);
+        }
+        if (b.id && a.id) {
+            return Number(b.id) - Number(a.id);
+        }
+        return 0;
+    });
+}
+
 async function fetchAllProducts() {
     try {
         const responses = await Promise.all(Object.values(API_ENDPOINTS).map(url => fetch(url)));
         const dataArrays = await Promise.all(responses.map(res => res.json()));
-        allProducts = dataArrays.flat();
+        let products = dataArrays.flat();
+        products = sortProductsNewestFirst(products); // NEW: sort newest first
+        allProducts = products;
         renderProducts(allProducts);
     } catch (error) {
         console.error('Error fetching products:', error);
