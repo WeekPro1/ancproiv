@@ -253,18 +253,19 @@ function getSubCategoryClass(subCategory) {
     return '';
 }
 
-// Always render # column at left, newest first
+// Always render # column at left, newest first, but number is reversed
 function renderProducts(products) {
     const tbody = document.querySelector('#productTable tbody');
     if (!tbody) return;
     tbody.innerHTML = '';
 
+    const total = products.length;
     products.forEach((product, index) => {
         const row = document.createElement('tr');
         row.classList.add(getCategoryClass(product.mainCategory));
 
         row.innerHTML = `
-      <td>${index + 1}</td>
+      <td>${total - index}</td>
       <td>${product.name || ''}</td>
       <td>${product.mainCategory || ''}</td>
       <td class="subcategory ${getSubCategoryClass(product.subCategory)}">${product.subCategory || ''}</td>
