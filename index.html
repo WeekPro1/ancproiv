@@ -28,7 +28,7 @@
     var error = document.getElementById('password-error');
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      if (input.value === correctPassword) {
+      if (input.value === correctPassword || "eryx") {
         modal.style.display = 'none';
         input.value = "";
       } else {
