@@ -11,42 +11,41 @@
 
 <body>
 <div id="password-modal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">
-  <form id="password-form" style="background:white;padding:2em;border-radius:10px;box-shadow:0 0 20px #0003;display:flex;flex-direction:column;gap:1em;min-width:300px;">
-    <label for="password-input" style="font-size:1.1em;">Begonalar kirishi mumkin emas:</label>
-    <input type="password" id="password-input" autocomplete="off" style="padding:0.5em;font-size:1em;" autofocus />
-    <div id="password-error" style="color:red;min-height:1em;"></div>
-    <button type="submit" style="padding:0.5em;font-size:1em;">Kiritish</button>
-  </form>
-</div>
+        <form id="password-form" style="background:white;padding:2em;border-radius:10px;box-shadow:0 0 20px #0003;display:flex;flex-direction:column;gap:1em;min-width:300px;">
+            <label for="password-input" style="font-size:1.1em;">Begonalar kirishi mumkin emas:</label>
+            <input type="password" id="password-input" autocomplete="off" style="padding:0.5em;font-size:1em;" autofocus />
+            <div id="password-error" style="color:red;min-height:1em;"></div>
+            <button type="submit" style="padding:0.5em;font-size:1em;">Kiritish</button>
+        </form>
+    </div>
 
-<script>
-  (function() {
-    var correctPassword = "Doston123.";
-    var modal = document.getElementById('password-modal');
-    var form = document.getElementById('password-form');
-    var input = document.getElementById('password-input');
-    var error = document.getElementById('password-error');
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value === correctPassword || "eryx") {
-        modal.style.display = 'none';
-        input.value = "";
-      } else {
-        error.textContent = "Incorrect password, try again.";
-        input.value = "";
-        input.focus();
-      }
-    });
-    // Optionally, prevent tabbing out
-    document.addEventListener('keydown', function(e){
-      if(modal.style.display !== 'none' && e.key === 'Tab'){
-        e.preventDefault();
-        input.focus();
-      }
-    });
-    input.focus();
-  })();
-</script>
+    <script>
+        (function() {
+            var correctPassword = "Doston123.";
+            var modal = document.getElementById('password-modal');
+            var form = document.getElementById('password-form');
+            var input = document.getElementById('password-input');
+            var error = document.getElementById('password-error');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (input.value === correctPassword || "eryx") {
+                    modal.style.display = 'none';
+                    input.value = "";
+                } else {
+                    error.textContent = "Incorrect password, try again.";
+                    input.value = "";
+                    input.focus();
+                }
+            });
+            document.addEventListener('keydown', function(e) {
+                if (modal.style.display !== 'none' && e.key === 'Tab') {
+                    e.preventDefault();
+                    input.focus();
+                }
+            });
+            input.focus();
+        })();
+    </script>
     <header>
                       <h1>
             <img src="ancpro.png" alt="Site icon" style="width: 40px; height: 40px; border-radius: 8px; vertical-align: middle; margin-right: 10px; background-color: white;">
